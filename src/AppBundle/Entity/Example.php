@@ -24,14 +24,14 @@ class Example
     /**
      * @var string
      *
-     * @ORM\Column(name="example", type="text")
+     * @ORM\Column(name="example", type="text", nullable=true)
      */
     private $example;
 
     /**
      * @var string
      *
-     * @ORM\Column(name="translation", type="text")
+     * @ORM\Column(name="translation", type="text", nullable=true)
      */
     private $translation;
 

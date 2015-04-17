@@ -1,29 +1,28 @@
 <?php
-
-
-
-namespace AppBundle\Service;
-
+namespace AppBundle\DataFixtures\ORM;
 
 use AppBundle\Entity\Definition;
 use AppBundle\Entity\Example;
 use AppBundle\Entity\Term;
+use Doctrine\Common\DataFixtures\FixtureInterface;
+use Doctrine\Common\Persistence\ObjectManager;
+use Symfony\Component\Validator\Constraints\Date;
 
-class ParseCsvService {
+class LoadBook implements FixtureInterface{
 
-    private $doctrine;
-    private $validator;
-    private $root_dir;
-    private $em;
-    public function __construct($doctrine,$validator,$root_dir){
-        $this->doctrine=$doctrine;
-        $this->validator=$validator;
-        $this->root_dir=$root_dir;
-        $this->em=$this->doctrine->getManager();
+
+    public function load(ObjectManager $em)
+    {
+
+        $this->saveInfos($em);
+
     }
-    public function saveInfos(){
+
+    public function saveInfos($em){
         $row = 1;
-        $handle=fopen($this->root_dir.DIRECTORY_SEPARATOR.'Resources'.DIRECTORY_SEPARATOR.'csv'.DIRECTORY_SEPARATOR.'dico.csv','r');
+
+        // trouver le moyen de recupere la root directory ici
+        $handle=fopen($this->get('kernel')->getRootDir().DIRECTORY_SEPARATOR.'Resources'.DIRECTORY_SEPARATOR.'csv'.DIRECTORY_SEPARATOR.'dico.csv','r');
         while (($csv=fgetcsv($handle, null, ';')) !== FALSE) {
             $num = count($csv);
             if($row==1){
@@ -33,18 +32,21 @@ class ParseCsvService {
             $row++;
 
             for ($c=0; $c < $num; $c++){
+
+                // voir si le vardump ca passe
+
                 if (empty($csv[$c]) || $csv[$c] == 'NULL'){
                     var_dump($csv[$c].'is empty');
                     $csv[$c] = null;
                 }
             }
 
-            $this->hydrateTerm($csv);
+            $this->hydrateTerm($csv, $em);
         }
-        $this->em->flush();
+        $em->flush();
     }
 
-    public function hydrateTerm($array){
+    public function hydrateTerm($array, $em){
         $newTerm=new Term();
         $newTerm->setName($array[0]);
         $newTerm->setCategory($array[3]);
@@ -58,16 +60,16 @@ class ParseCsvService {
         $newDate = new \DateTime();
         $newDate->setTimestamp(intval($array[12]));
         $newTerm->setDateCreated($newDate);
-        $this->em->persist($newTerm);
+        $em->persist($newTerm);
         $definitions=[
             'def1'=>$array[1],
             'def2'=>$array[2]
         ];
-        $this->hydrateDefinitions($definitions,$newTerm);
-        $this->hydrateExamples($array[4],$array[5],$newTerm);
+        $this->hydrateDefinitions($definitions,$newTerm, $em);
+        $this->hydrateExamples($array[4],$array[5],$newTerm, $em);
 
     }
-    public function hydrateDefinitions($array,$term){
+    public function hydrateDefinitions($array,$term, $em){
 
         foreach($array as $def){
 
@@ -75,12 +77,12 @@ class ParseCsvService {
                 $newDef = new Definition();
                 $newDef->setDescription($def);
                 $newDef->setTerm($term);
-                $this->em->persist($newDef);
+                $em->persist($newDef);
             }
 
         };
     }
-    public function hydrateExamples($ex,$trad,$term){
+    public function hydrateExamples($ex,$trad,$term, $em){
 
         if (!empty($ex)){
 
@@ -88,9 +90,10 @@ class ParseCsvService {
             $newExample->setExample($ex);
             $newExample->setTranslation($trad);
             $newExample->setTerm($term);
-            $this->em->persist($newExample);
+            $em->persist($newExample);
 
         }
 
     }
+
 }

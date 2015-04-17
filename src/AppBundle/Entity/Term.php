@@ -38,42 +38,42 @@ class Term
     /**
      * @var string
      *
-     * @ORM\Column(name="variation", type="string", length=255)
+     * @ORM\Column(name="variation", type="string", length=255, nullable=true)
      */
     private $variation;
 
     /**
      * @var string
      *
-     * @ORM\Column(name="pronunciation", type="string", length=255)
+     * @ORM\Column(name="pronunciation", type="string", length=255, nullable=true)
      */
     private $pronunciation;
 
     /**
      * @var string
      *
-     * @ORM\Column(name="nature", type="string", length=255)
+     * @ORM\Column(name="nature", type="string", length=255, nullable=true)
      */
     private $nature;
 
     /**
      * @var string
      *
-     * @ORM\Column(name="genre", type="string", length=255)
+     * @ORM\Column(name="genre", type="string", length=255, nullable=true)
      */
     private $genre;
 
     /**
      * @var string
      *
-     * @ORM\Column(name="number", type="string", length=255)
+     * @ORM\Column(name="number", type="string", length=255, nullable=true)
      */
     private $number;
 
     /**
      * @var string
      *
-     * @ORM\Column(name="origin", type="text")
+     * @ORM\Column(name="origin", type="text", nullable=true)
      */
     private $origin;
 
@@ -87,7 +87,7 @@ class Term
     /**
      * @var integer
      *
-     * @ORM\Column(name="nbVotes", type="integer")
+     * @ORM\Column(name="nbVotes", type="integer", nullable=true)
      */
     private $nbVotes;
 
