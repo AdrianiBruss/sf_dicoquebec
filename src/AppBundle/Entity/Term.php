@@ -352,4 +352,112 @@ class Term
     {
         return $this->nbVotes;
     }
+    /**
+     * Constructor
+     */
+    public function __construct()
+    {
+        $this->definitions = new \Doctrine\Common\Collections\ArrayCollection();
+        $this->examples = new \Doctrine\Common\Collections\ArrayCollection();
+        $this->termBackups = new \Doctrine\Common\Collections\ArrayCollection();
+    }
+
+    /**
+     * Add definitions
+     *
+     * @param \AppBundle\Entity\Definition $definitions
+     * @return Term
+     */
+    public function addDefinition(\AppBundle\Entity\Definition $definitions)
+    {
+        $this->definitions[] = $definitions;
+
+        return $this;
+    }
+
+    /**
+     * Remove definitions
+     *
+     * @param \AppBundle\Entity\Definition $definitions
+     */
+    public function removeDefinition(\AppBundle\Entity\Definition $definitions)
+    {
+        $this->definitions->removeElement($definitions);
+    }
+
+    /**
+     * Get definitions
+     *
+     * @return \Doctrine\Common\Collections\Collection 
+     */
+    public function getDefinitions()
+    {
+        return $this->definitions;
+    }
+
+    /**
+     * Add examples
+     *
+     * @param \AppBundle\Entity\Example $examples
+     * @return Term
+     */
+    public function addExample(\AppBundle\Entity\Example $examples)
+    {
+        $this->examples[] = $examples;
+
+        return $this;
+    }
+
+    /**
+     * Remove examples
+     *
+     * @param \AppBundle\Entity\Example $examples
+     */
+    public function removeExample(\AppBundle\Entity\Example $examples)
+    {
+        $this->examples->removeElement($examples);
+    }
+
+    /**
+     * Get examples
+     *
+     * @return \Doctrine\Common\Collections\Collection 
+     */
+    public function getExamples()
+    {
+        return $this->examples;
+    }
+
+    /**
+     * Add termBackups
+     *
+     * @param \AppBundle\Entity\TermBackup $termBackups
+     * @return Term
+     */
+    public function addTermBackup(\AppBundle\Entity\TermBackup $termBackups)
+    {
+        $this->termBackups[] = $termBackups;
+
+        return $this;
+    }
+
+    /**
+     * Remove termBackups
+     *
+     * @param \AppBundle\Entity\TermBackup $termBackups
+     */
+    public function removeTermBackup(\AppBundle\Entity\TermBackup $termBackups)
+    {
+        $this->termBackups->removeElement($termBackups);
+    }
+
+    /**
+     * Get termBackups
+     *
+     * @return \Doctrine\Common\Collections\Collection 
+     */
+    public function getTermBackups()
+    {
+        return $this->termBackups;
+    }
 }

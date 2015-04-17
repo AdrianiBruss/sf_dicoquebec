@@ -97,4 +97,27 @@ class Example
     {
         return $this->translation;
     }
+
+    /**
+     * Set term
+     *
+     * @param \AppBundle\Entity\Term $term
+     * @return Example
+     */
+    public function setTerm(\AppBundle\Entity\Term $term = null)
+    {
+        $this->term = $term;
+
+        return $this;
+    }
+
+    /**
+     * Get term
+     *
+     * @return \AppBundle\Entity\Term 
+     */
+    public function getTerm()
+    {
+        return $this->term;
+    }
 }
