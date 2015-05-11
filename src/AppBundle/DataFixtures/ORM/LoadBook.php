@@ -7,9 +7,19 @@ use AppBundle\Entity\Term;
 use Doctrine\Common\DataFixtures\FixtureInterface;
 use Doctrine\Common\Persistence\ObjectManager;
 use Symfony\Component\Validator\Constraints\Date;
+use Symfony\Component\DependencyInjection\ContainerAwareInterface;
+use Symfony\Component\DependencyInjection\ContainerInterface;
+use Cocur\Slugify\Slugify;
 
-class LoadBook implements FixtureInterface{
+class LoadBook implements FixtureInterface,ContainerAwareInterface{
 
+    private $container;
+
+
+    public function setContainer(ContainerInterface $container = null)
+    {
+        $this->container = $container;
+    }
 
     public function load(ObjectManager $em)
     {
@@ -22,7 +32,7 @@ class LoadBook implements FixtureInterface{
         $row = 1;
 
         // trouver le moyen de recupere la root directory ici
-        $handle=fopen($this->get('kernel')->getRootDir().DIRECTORY_SEPARATOR.'Resources'.DIRECTORY_SEPARATOR.'csv'.DIRECTORY_SEPARATOR.'dico.csv','r');
+        $handle=fopen($this->container->get('kernel')->getRootDir().DIRECTORY_SEPARATOR.'Resources'.DIRECTORY_SEPARATOR.'csv'.DIRECTORY_SEPARATOR.'dico.csv','r');
         while (($csv=fgetcsv($handle, null, ';')) !== FALSE) {
             $num = count($csv);
             if($row==1){
@@ -36,17 +46,20 @@ class LoadBook implements FixtureInterface{
                 // voir si le vardump ca passe
 
                 if (empty($csv[$c]) || $csv[$c] == 'NULL'){
-                    var_dump($csv[$c].'is empty');
+//                    var_dump($csv[$c].'is empty');
                     $csv[$c] = null;
                 }
             }
 
             $this->hydrateTerm($csv, $em);
         }
+        dump('terms saved');
         $em->flush();
     }
 
     public function hydrateTerm($array, $em){
+        $slugify=new Slugify();
+
         $newTerm=new Term();
         $newTerm->setName($array[0]);
         $newTerm->setCategory($array[3]);
@@ -60,6 +73,7 @@ class LoadBook implements FixtureInterface{
         $newDate = new \DateTime();
         $newDate->setTimestamp(intval($array[12]));
         $newTerm->setDateCreated($newDate);
+        $newTerm->setSlug($slugify->slugify($array[0]));
         $em->persist($newTerm);
         $definitions=[
             'def1'=>$array[1],
