@@ -6,9 +6,6 @@ namespace AppBundle\Service;
 
 
 use AppBundle\Entity\DayWord;
-use AppBundle\Entity\Definition;
-use AppBundle\Entity\Example;
-use AppBundle\Entity\Term;
 
 class WordOfTheDayService {
 

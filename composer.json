@@ -24,7 +24,9 @@
         "doctrine/migrations": "@dev",
         "doctrine/doctrine-migrations-bundle": "~1.0",
         "doctrine/doctrine-fixtures-bundle": "~2.2",
-        "cocur/slugify": "~1.1"
+        "cocur/slugify": "~1.1",
+        "google/recaptcha": "~1.1",
+        "excelwebzone/recaptcha-bundle": "~1.2"
     },
     "require-dev": {
         "sensio/generator-bundle": "~2.3"

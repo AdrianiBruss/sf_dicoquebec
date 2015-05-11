@@ -3,6 +3,8 @@
 namespace AppBundle\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
+use EWZ\Bundle\RecaptchaBundle\Validator\Constraints as Recaptcha;
+
 
 /**
  * Term
@@ -115,6 +117,12 @@ class Term
      * @ORM\Column(name="slug",type="string",length=255)
      */
     private $slug;
+
+
+    /**
+     * @Recaptcha\True
+     */
+    public $recaptcha;
 
 
     /**

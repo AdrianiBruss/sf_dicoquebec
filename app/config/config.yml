@@ -12,7 +12,7 @@ framework:
         strict_requirements: ~
     form:            ~
     csrf_protection: ~
-    validation:      { enable_annotations: true }
+    validation:      { enable_annotations: false }
     templating:
         engines: ['twig']
         #assets_version: SomeVersionScheme
@@ -73,3 +73,8 @@ swiftmailer:
     username:  "%mailer_user%"
     password:  "%mailer_password%"
     spool:     { type: memory }
+ewz_recaptcha:
+    public_key: 6Lf2CPwSAAAAACksRCt3E7-cWv3THXCOZdcf8Diw
+    private_key: 6Lf2CPwSAAAAAJGiAg6UqwtvkJGj6rGfpp_Ixncn
+    locale_key:  %kernel.default_locale%
+    ajax: true
