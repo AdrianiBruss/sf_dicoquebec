@@ -12,4 +12,12 @@ use Doctrine\ORM\EntityRepository;
  */
 class TermRepository extends EntityRepository
 {
+    public function findPopularTerms(){
+        $qb=$this->createQueryBuilder("a");
+
+        $query=$qb
+            ->where('a.nbVotes>25')
+            ->getQuery();
+        return $query->getResult();
+    }
 }
