@@ -9,9 +9,10 @@ use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\HttpFoundation\Request;
 
-
 class DefaultController extends Controller
 {
+
+
     /**
      * @Route("/", name="homepage")
      */
@@ -30,9 +31,9 @@ class DefaultController extends Controller
 
         $termForm = $this->createForm(new TermType(), $newTerm);
         $termForm->handleRequest($request);
-
+        dump('avant');
         if ($termForm->isValid()){
-
+            dump('après');
             $slugify = new Slugify();
 
             $slugified_name = $slugify->slugify($newTerm->getName());

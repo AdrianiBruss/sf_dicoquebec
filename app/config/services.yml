@@ -10,3 +10,4 @@ services:
   wotd_service:
       class: AppBundle\Service\WordOfTheDayService
       arguments: ["@doctrine"]
+
