@@ -7,3 +7,6 @@ services:
   csv_service:
     class: AppBundle\Service\ParseCsvService
     arguments: ["@doctrine","@validator","%kernel.root_dir%"]
+  wotd_service:
+      class: AppBundle\Service\WordOfTheDayService
+      arguments: ["@doctrine"]
