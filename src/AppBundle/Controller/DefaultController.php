@@ -3,7 +3,9 @@
 namespace AppBundle\Controller;
 
 use AppBundle\Entity\Term;
+use AppBundle\Entity\TermBackup;
 use AppBundle\Form\TermType;
+use AppBundle\Form\TermUpdateType;
 use Cocur\Slugify\Slugify;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
@@ -65,7 +67,7 @@ class DefaultController extends Controller
             'termForm'=> $termForm->createView()
         );
 
-        return $this->render('term/addTerm.html.twig', $params);
+        return $this->render('term/add.html.twig', $params);
 
     }
 
@@ -75,9 +77,38 @@ class DefaultController extends Controller
     public function updateTermAction($slug, Request $request)
     {
         $termRepo = $this->getDoctrine()->getRepository('AppBundle:Term');
-        $term = $termRepo->findBySlug($slug);
+
+        $term = $termRepo->findOneBySlug($slug);
+
+        $termForm = $this->createForm(new TermUpdateType(), $term);
+        $termForm->handleRequest($request);
+
+        if ($termForm->isValid()){
+
+            $updatedTerm = new TermBackup();
+            $updatedTerm->setTerm($term);
+            $updatedTerm->setDateModified(new \DateTime());
+            $updatedTerm->setName($term->getName());
+            $updatedTerm->setCategory($term->getCategory());
+            $updatedTerm->setVariation($term->getVariation());
+            $updatedTerm->setPronunciation($term->getPronunciation());
+            $updatedTerm->setNature($term->getNature());
+            $updatedTerm->setNumber($term->getNumber());
+            $updatedTerm->setOrigin($term->getOrigin());
+
+
+            $em = $this->getDoctrine()->getManager();
+            $em->persist($term);
+            $em->persist($updatedTerm);
+            $em->flush();
+
+            $this->addFlash('success', 'Terme Modifié ! ');
+            return $this->redirectToRoute('homepage');
+
+        }
 
         $params = array(
+            'termForm'=> $termForm->createView(),
             'term' => $term
         );
 
