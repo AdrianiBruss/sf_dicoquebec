@@ -13,7 +13,7 @@ use Symfony\Component\HttpFoundation\Request;
 
 class DefaultController extends Controller
 {
-
+    private $session;
 
     /**
      * @Route("/", name="homepage")
@@ -31,7 +31,8 @@ class DefaultController extends Controller
 
         $newTerm = new Term();
 
-        $termForm = $this->createForm(new TermType(), $newTerm);
+        $this->session = $this->get('session');
+        $termForm = $this->createForm(new TermType($this->session), $newTerm);
         $termForm->handleRequest($request);
         if ($termForm->isValid()) {
             $slugify = new Slugify();
@@ -79,11 +80,13 @@ class DefaultController extends Controller
 
         $term = $termRepo->findOneBySlug($slug);
 
-
-        $termForm = $this->createForm(new TermUpdateType(), $term);
+        $this->session = $this->get('session');
+        $termForm = $this->createForm(new TermUpdateType($this->session), $term);
         $termForm->handleRequest($request);
         if ($termForm->isValid()) {
-
+            if(!$this->session->get('email')){
+                $this->session->set('email',$termForm->get('email')->getData());
+            }
             if ($termForm->get('Delete')->isClicked()) {
                 $em = $this->getDoctrine()->getManager();
                 $em->remove($term);
@@ -122,5 +125,5 @@ class DefaultController extends Controller
 
         return $this->render('term/update.html.twig', $params);
     }
-    
+
 }
