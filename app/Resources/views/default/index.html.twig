@@ -19,7 +19,11 @@
                 </div>
                 <div class="row">
                     <div class="col-xs-6 col-lg-4">
-                        {{ wotd.term.name }}
+                        <h2>Mot of the jour</h2>
+                        <p>{{ wotd.term.name }}</p>
+                        {% for definition in wotd.term.definitions %}
+                        <p>{{ definition.description }}</p>
+                        {% endfor %}
                     </div><!--/.col-xs-6.col-lg-4-->
                     <div class="col-xs-6 col-lg-4">
                         <h2>Heading</h2>
@@ -52,7 +56,7 @@
             <div class="col-xs-6 col-sm-3 sidebar-offcanvas" id="sidebar">
                 <div class="list-group">
                     {% for term in terms %}
-                        <a href="#" class="list-group-item">{{ term.name }}</a>
+                        <a href="{{ path('showTerm', {'slug': term.slug   } ) }}" class="list-group-item">{{ term.name }}</a>
                     {% endfor %}
 
                 </div>

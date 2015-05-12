@@ -135,4 +135,18 @@ class DefaultController extends Controller
         return $this->render('term/update.html.twig', $params);
     }
 
+    /**
+     * @Route("/term/{slug}", name="showTerm")
+     */
+    public function showTermAction($slug){
+        $termRepo = $this->getDoctrine()->getRepository('AppBundle:Term');
+
+        $term = $termRepo->findOneBySlug($slug);
+
+        $params = [
+            'term'=>$term
+        ];
+        return $this->render('term/single.html.twig', $params);
+    }
+
 }

@@ -1,0 +1,66 @@
+{% extends 'base.html.twig' %}
+{% block title %}
+    {{ term.name }}
+{% endblock %}
+
+{% block body %}
+
+    <div class="container">
+        <div class="jumbotron">
+            <h1>{{ term.name }}</h1>
+
+
+            {% for def in term.definitions %}
+                <p class="lead">{{ def.description }}</p>
+            {% endfor %}
+
+
+            <p><a class="btn btn-lg btn-success" href="#" role="button">Thumbs Up!</a></p>
+        </div>
+        <div class="row marketing">
+            <div class="col-lg-6">
+                {% if term.pronunciation %}
+                    <h4>Prononciation</h4>
+                    <p>{{ term.pronunciation }}</p>
+                {% endif %}
+
+                {% if term.category %}
+                    <h4>Categorie</h4>
+                    <p>{{ term.category | category() }}</p>
+                {% endif %}
+
+                {% if term.variation %}
+                    <h4>Variation</h4>
+                    <p>{{ term.variation }}</p>
+                {% endif %}
+            </div>
+            <div class="col-lg-6">
+                {% if term.genre %}
+
+                    <h4>Genre</h4>
+                    <p>{{ term.genre }}</p>
+                {% endif %}
+                {% if term.number %}
+                    <h4>Nombre</h4>
+                    <p>{{ term.number }}</p>
+                {% endif %}
+
+
+
+                {% if term.origin %}
+                    <h4>Origine</h4>
+                    <p>{{ term.origin }}</p>
+                {% endif %}
+
+                {% if term.nature %}
+                    <h4>Nature</h4>
+                    <p>{{ term.nature }}</p>
+                {% endif %}
+            </div>
+        </div>
+
+
+    </div>
+
+
+{% endblock %}
