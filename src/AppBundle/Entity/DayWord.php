@@ -22,43 +22,41 @@ class DayWord
     private $id;
 
     /**
-     * @var integer
-     *
-     * @ORM\Column(name="wordId", type="integer")
+     * @ORM\OneToOne(targetEntity="AppBundle\Entity\Term", cascade={"remove"})
      */
-    private $wordId;
-
+    private $term;
 
     /**
      * Get id
      *
-     * @return integer 
+     * @return integer
      */
     public function getId()
     {
         return $this->id;
     }
 
+
     /**
-     * Set wordId
+     * Set term
      *
-     * @param integer $wordId
+     * @param \AppBundle\Entity\Term $term
      * @return DayWord
      */
-    public function setWordId($wordId)
+    public function setTerm(\AppBundle\Entity\Term $term = null)
     {
-        $this->wordId = $wordId;
+        $this->term = $term;
 
         return $this;
     }
 
     /**
-     * Get wordId
+     * Get term
      *
-     * @return integer 
+     * @return \AppBundle\Entity\Term 
      */
-    public function getWordId()
+    public function getTerm()
     {
-        return $this->wordId;
+        return $this->term;
     }
 }

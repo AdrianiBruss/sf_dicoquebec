@@ -20,4 +20,13 @@ class TermRepository extends EntityRepository
             ->getQuery();
         return $query->getResult();
     }
+    public function findHomeTerms(){
+        $qb=$this->createQueryBuilder("a");
+
+        $query=$qb
+            ->orderBy("a.name",'ASC')
+            ->getQuery();
+
+        return $query->getResult();
+    }
 }

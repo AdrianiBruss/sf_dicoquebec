@@ -12,4 +12,16 @@ use Doctrine\ORM\EntityRepository;
  */
 class DayWordRepository extends EntityRepository
 {
+    public function findWotd()
+    {
+
+        $qb = $this->createQueryBuilder("a");
+
+        $query = $qb
+            ->orderBy("a.id", 'DESC')
+            ->setMaxResults(1)
+            ->getQuery();
+
+        return $query->getOneOrNullResult();
+    }
 }

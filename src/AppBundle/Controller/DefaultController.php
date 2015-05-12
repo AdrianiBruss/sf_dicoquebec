@@ -20,7 +20,16 @@ class DefaultController extends Controller
      */
     public function indexAction()
     {
-        return $this->render('default/index.html.twig');
+        $termRepo = $this->getDoctrine()->getRepository('AppBundle:Term');
+        $terms= $termRepo->findHomeTerms();
+        $wotdRepo = $this->getDoctrine()->getRepository('AppBundle:DayWord');
+        $wotd= $wotdRepo->findWotd();
+        $params=[
+            'terms'=>$terms,
+            'wotd'=>$wotd
+        ];
+        dump($params);
+        return $this->render('default/index.html.twig',$params);
     }
 
     /**

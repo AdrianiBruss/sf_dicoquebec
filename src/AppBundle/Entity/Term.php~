@@ -4,6 +4,7 @@ namespace AppBundle\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
 
+
 /**
  * Term
  *
@@ -106,15 +107,17 @@ class Term
 
     /**
      *
-     * @ORM\OneToMany(targetEntity="AppBundle\Entity\TermBackup", mappedBy="term")
+     * @ORM\OneToMany(targetEntity="AppBundle\Entity\TermBackup", mappedBy="term", cascade={"remove"})
      */
     private $termBackups;
 
     /**
      * @var string
-     * @ORM\Column(name="slug",type="string",length=255,unique=true)
+     * @ORM\Column(name="slug",type="string",length=255)
      */
     private $slug;
+
+
 
 
     /**
@@ -463,5 +466,28 @@ class Term
     public function getTermBackups()
     {
         return $this->termBackups;
+    }
+
+    /**
+     * Set slug
+     *
+     * @param string $slug
+     * @return Term
+     */
+    public function setSlug($slug)
+    {
+        $this->slug = $slug;
+
+        return $this;
+    }
+
+    /**
+     * Get slug
+     *
+     * @return string 
+     */
+    public function getSlug()
+    {
+        return $this->slug;
     }
 }

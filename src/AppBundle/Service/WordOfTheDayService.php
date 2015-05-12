@@ -30,7 +30,7 @@ class WordOfTheDayService {
         }
         $this->doctrine->getManager();
         $newDayWord = new DayWord();
-        $newDayWord->setWordId($potentialTerm->getId());
+        $newDayWord->setTerm($potentialTerm);
         $this->em->persist($newDayWord);
         $this->em->flush();
         dump("Word of the day is chosen! date :  ");
