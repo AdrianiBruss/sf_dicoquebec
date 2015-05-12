@@ -10,4 +10,7 @@ services:
   wotd_service:
       class: AppBundle\Service\WordOfTheDayService
       arguments: ["@doctrine"]
-
+  twig_app_extension:
+      class: AppBundle\Twig\AppExtension
+      tags:
+        - {name:twig.extension}
