@@ -14,8 +14,10 @@
                 <p class="lead">{{ def.description }}</p>
             {% endfor %}
 
-
-            <p><a class="btn btn-lg btn-success" href="#" role="button">Thumbs Up!</a></p>
+            {% if (voted==false) %}
+            <p><a class=" btn btn-lg btn-success" href="{{ path('voteTerm', {'slug': term.slug})}}" role="button">Thumbs
+                    Up!</a></p>
+            {% endif %}
         </div>
         <div class="row marketing">
             <div class="col-lg-6">
@@ -35,6 +37,8 @@
                 {% endif %}
             </div>
             <div class="col-lg-6">
+                <h4>Votes</h4>
+                <p id="votes">{{ term.nbVotes }}</p>
                 {% if term.genre %}
 
                     <h4>Genre</h4>
@@ -61,6 +65,19 @@
 
 
     </div>
-
+    <script>
+        $('.btn').on('click', function (e) {
+            e.preventDefault();
+            var $self = $(this);
+            $.ajax({
+                url: $self.attr('href')
+            }).done(function (data) {
+                if (data) {
+                    $self.hide();
+                    $('#votes').html(data);
+                }
+            });
+        });
+    </script>
 
 {% endblock %}

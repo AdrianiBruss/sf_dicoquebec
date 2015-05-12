@@ -10,6 +10,8 @@ use Cocur\Slugify\Slugify;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\HttpFoundation\JsonResponse;
+
 
 class DefaultController extends Controller
 {
@@ -139,14 +141,45 @@ class DefaultController extends Controller
      * @Route("/term/{slug}", name="showTerm")
      */
     public function showTermAction($slug){
-        $termRepo = $this->getDoctrine()->getRepository('AppBundle:Term');
+        $voted=false;
+        $this->session = $this->get('session');
+        dump($this->session->get('votes'));
 
+        $termRepo = $this->getDoctrine()->getRepository('AppBundle:Term');
         $term = $termRepo->findOneBySlug($slug);
 
+        $this->session=$this->get('session');
+        if(array_key_exists($slug,$this->get('session')->get('votes'))){
+            $voted=true;
+        }
+
         $params = [
-            'term'=>$term
+            'term'=>$term,
+            'voted'=>$voted
         ];
         return $this->render('term/single.html.twig', $params);
+    }
+
+    /**
+     * @Route("/vote/term/{slug}", name="voteTerm")
+     */
+    public function voteTermAction($slug){
+        $termRepo = $this->getDoctrine()->getRepository('AppBundle:Term');
+        $term = $termRepo->findOneBySlug($slug);
+
+        $this->session = $this->get('session');
+        $sessionVotes = $this->session->get('votes');
+        if(!array_key_exists($slug,$sessionVotes)){
+            $voteValue = intval($term->getNbVotes()) + 1;
+            $term->setNbVotes($voteValue);
+            $em = $this->getDoctrine()->getManager();
+            $em->persist($term);
+            $em->flush();
+
+            $sessionVotes[$slug] = true;
+            $this->session->set('votes',$sessionVotes);
+        }
+        return new JsonResponse($term->getNbVotes());
     }
 
 }
