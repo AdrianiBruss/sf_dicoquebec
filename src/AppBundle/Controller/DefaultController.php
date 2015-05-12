@@ -33,9 +33,7 @@ class DefaultController extends Controller
 
         $termForm = $this->createForm(new TermType(), $newTerm);
         $termForm->handleRequest($request);
-        dump('avant');
-        if ($termForm->isValid()){
-            dump('après');
+        if ($termForm->isValid()) {
             $slugify = new Slugify();
 
             $slugified_name = $slugify->slugify($newTerm->getName());
@@ -44,28 +42,28 @@ class DefaultController extends Controller
             $term = $this->getDoctrine()->getRepository('AppBundle:Term');
             $checkTerm = $term->findBySlug($slugified_name);
 
-            if (!$checkTerm){
+            if (!$checkTerm) {
 
 //                term doesn't exist
 
-            $newTerm->setDateCreated(new \DateTime());
-            $newTerm->setSlug($slugified_name);
+                $newTerm->setDateCreated(new \DateTime());
+                $newTerm->setSlug($slugified_name);
 
-            $em = $this->getDoctrine()->getManager();
-            $em->persist($newTerm);
-            $em->flush();
+                $em = $this->getDoctrine()->getManager();
+                $em->persist($newTerm);
+                $em->flush();
 
                 $this->addFlash('success', 'Terme Ajouté ! ');
                 return $this->redirectToRoute('homepage');
 
-            }else{
+            } else {
                 $this->addFlash('error', 'Terme déjà existant ! ');
             }
 
         }
 
         $params = array(
-            'termForm'=> $termForm->createView()
+            'termForm' => $termForm->createView()
         );
 
         return $this->render('term/add.html.twig', $params);
@@ -81,10 +79,18 @@ class DefaultController extends Controller
 
         $term = $termRepo->findOneBySlug($slug);
 
+
         $termForm = $this->createForm(new TermUpdateType(), $term);
         $termForm->handleRequest($request);
+        if ($termForm->isValid()) {
 
-        if ($termForm->isValid()){
+            if ($termForm->get('Delete')->isClicked()) {
+                $em = $this->getDoctrine()->getManager();
+                $em->remove($term);
+                $em->flush();
+                $this->addFlash('success', 'Terme ' . $term->getName() . ' Supprimé ! ');
+                return $this->redirectToRoute('homepage');
+            }
 
             $updatedTerm = new TermBackup();
             $updatedTerm->setTerm($term);
@@ -96,6 +102,7 @@ class DefaultController extends Controller
             $updatedTerm->setNature($term->getNature());
             $updatedTerm->setNumber($term->getNumber());
             $updatedTerm->setOrigin($term->getOrigin());
+            $updatedTerm->setGenre($term->getGenre());
 
 
             $em = $this->getDoctrine()->getManager();
@@ -109,25 +116,11 @@ class DefaultController extends Controller
         }
 
         $params = array(
-            'termForm'=> $termForm->createView(),
+            'termForm' => $termForm->createView(),
             'term' => $term
         );
 
         return $this->render('term/update.html.twig', $params);
     }
-
-    /**
-     * @Route("/term/delete/{slug}", name="deleteTerm")
-     */
-    public function deleteTermAction($slug, Request $request)
-    {
-        $termRepo = $this->getDoctrine()->getRepository('AppBundle:Term');
-        $term = $termRepo->findBySlug($slug);
-
-        $params = array(
-            'term' => $term
-        );
-
-        return $this->render('default/index.html.twig', $params);
-    }
+    
 }

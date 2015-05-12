@@ -3,7 +3,6 @@
 namespace AppBundle\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
-use EWZ\Bundle\RecaptchaBundle\Validator\Constraints as Recaptcha;
 
 
 /**
@@ -108,7 +107,7 @@ class Term
 
     /**
      *
-     * @ORM\OneToMany(targetEntity="AppBundle\Entity\TermBackup", mappedBy="term")
+     * @ORM\OneToMany(targetEntity="AppBundle\Entity\TermBackup", mappedBy="term", cascade={"remove"})
      */
     private $termBackups;
 
@@ -119,10 +118,6 @@ class Term
     private $slug;
 
 
-    /**
-     * @Recaptcha\True
-     */
-    public $recaptcha;
 
 
     /**

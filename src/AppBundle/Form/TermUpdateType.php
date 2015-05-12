@@ -5,6 +5,7 @@ namespace AppBundle\Form;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolverInterface;
+use EWZ\Bundle\RecaptchaBundle\Validator\Constraints\True;
 
 class TermUpdateType extends AbstractType
 {
@@ -22,8 +23,15 @@ class TermUpdateType extends AbstractType
             ->add('genre')
             ->add('number')
             ->add('origin')
-
-            ->add('Add New', 'submit', array('label'=>'Ajouter'));
+            ->add('recaptcha', 'ewz_recaptcha',array(
+                'mapped'      => false,
+                'constraints' => array(
+                    new True()
+                ),
+                'error_bubbling'=>true
+            ))
+            ->add('Update', 'submit', array('label'=>'Modifier'))
+            ->add('Delete', 'submit', array('label'=>'supprimer'));
     }
     
     /**
