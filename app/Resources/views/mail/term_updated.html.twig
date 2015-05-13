@@ -1,8 +1,6 @@
 {% extends "mail.html.twig" %}
 
 {% block content %}
-    <h1>RESET DE PASSWORD</h1>
-    <a href="{{ url("resetPassword", {"email": user.email, "token": user.token}) }}">reset de mot passe</a>
-    <p>{{ user.email }}</p>
-    <p>{{ user.token }}</p>
+    <h1>{{ email }} a modifié le terme {{ term.name }}</h1>
+    <p>  <a href="{{ url('updateTerm', {'slug': term.slug   } ) }}" class="list-group-item">Voir les modifications</a></p>
 {% endblock %}

@@ -9,19 +9,25 @@ namespace AppBundle\Service;
 class MailService {
 
     private $mailer;
-    public function __construct($mailer){
+    private $templating;
+    private $admin_mail = "abrussolo@gmail.com";
+    public function __construct($mailer,$templating){
         $this->mailer=$mailer;
+        $this->templating=$templating;
     }
 
     public function sendMailOnRemoval($email,$term){
         $message = $this->mailer->createMessage()
-            ->setSubject('Reset Password')
+            ->setSubject('Dikkebek : terme supprimé')
             ->setFrom($email)
-            ->setTo('abrussolo@gmail.com')
+            ->setTo($this->admin_mail)
             ->setBody(
-                $this->renderView(
+                $this->templating->render(
                     'mail/term_removed.html.twig',
-                    array('user' => $term)
+                    array(
+                        'term' => $term,
+                        'email' => $email
+                    )
                 ),
                 'text/html'
             )
@@ -30,13 +36,16 @@ class MailService {
     }
     public function sendMailOnAdd($email,$term){
         $message = $this->mailer->createMessage()
-            ->setSubject('Reset Password')
+            ->setSubject('Dikkebek : terme ajouté')
             ->setFrom($email)
-            ->setTo('abrussolo@gmail.com')
+            ->setTo($this->admin_mail)
             ->setBody(
-                $this->renderView(
+                $this->templating->render(
                     'mail/term_added.html.twig',
-                    array('user' => $term)
+                    array(
+                        'term' => $term,
+                        'email' => $email
+                    )
                 ),
                 'text/html'
             )
@@ -45,13 +54,16 @@ class MailService {
     }
     public function sendMailOnUpdate($email,$term){
         $message = $this->mailer->createMessage()
-            ->setSubject('Reset Password')
+            ->setSubject('Dikkebek : terme modifié')
             ->setFrom($email)
-            ->setTo('abrussolo@gmail.com')
+            ->setTo($this->admin_mail)
             ->setBody(
-                $this->renderView(
+                $this->templating->render(
                     'mail/term_updated.html.twig',
-                    array('user' => $term)
+                    array(
+                        'term' => $term,
+                        'email' => $email
+                    )
                 ),
                 'text/html'
             )
