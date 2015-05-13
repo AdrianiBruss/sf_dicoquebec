@@ -10,6 +10,9 @@ services:
   wotd_service:
       class: AppBundle\Service\WordOfTheDayService
       arguments: ["@doctrine"]
+  mail_service:
+      class: AppBundle\Service\MailService
+      arguments: ["@mailer"]
   twig_app_extension:
       class: AppBundle\Twig\AppExtension
       tags:

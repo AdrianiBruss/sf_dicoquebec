@@ -25,14 +25,14 @@ class DefaultController extends Controller
     public function indexAction()
     {
         $termRepo = $this->getDoctrine()->getRepository('AppBundle:Term');
-        $terms= $termRepo->findHomeTerms();
+        $terms = $termRepo->findHomeTerms();
         $wotdRepo = $this->getDoctrine()->getRepository('AppBundle:DayWord');
-        $wotd= $wotdRepo->findWotd();
-        $params=[
-            'terms'=>$terms,
-            'wotd'=>$wotd
+        $wotd = $wotdRepo->findWotd();
+        $params = [
+            'terms' => $terms,
+            'wotd' => $wotd
         ];
-        return $this->render('default/index.html.twig',$params);
+        return $this->render('default/index.html.twig', $params);
     }
 
     /**
@@ -73,14 +73,14 @@ class DefaultController extends Controller
                 $newTerm->setSlug($slugified_name);
 
 
-                foreach($newTerm->getDefinitions() as $desc){
-                    if(!($desc->getDescription())){
+                foreach ($newTerm->getDefinitions() as $desc) {
+                    if (!($desc->getDescription())) {
                         $newTerm->removeDefinition($desc);
                     }
                 }
 
-                foreach($newTerm->getExamples() as $ex){
-                    if(!($ex->getExample()) || !($ex->getTranslation()) ){
+                foreach ($newTerm->getExamples() as $ex) {
+                    if (!($ex->getExample()) || !($ex->getTranslation())) {
                         $newTerm->removeExample($ex);
                     }
                 }
@@ -167,24 +167,25 @@ class DefaultController extends Controller
     /**
      * @Route("/term/{slug}", name="showTerm")
      */
-    public function showTermAction($slug){
-        $voted=false;
+    public function showTermAction($slug)
+    {
+        $voted = false;
         $this->session = $this->get('session');
 
         $termRepo = $this->getDoctrine()->getRepository('AppBundle:Term');
         $term = $termRepo->findOneBySlug($slug);
 
-        $this->session=$this->get('session');
-        if($this->get('session')->get('votes')){
-            if(array_key_exists($slug,$this->get('session')->get('votes'))){
-                $voted=true;
+        $this->session = $this->get('session');
+        if ($this->get('session')->get('votes')) {
+            if (array_key_exists($slug, $this->get('session')->get('votes'))) {
+                $voted = true;
             }
         }
 
 
         $params = [
-            'term'=>$term,
-            'voted'=>$voted
+            'term' => $term,
+            'voted' => $voted
         ];
         return $this->render('term/single.html.twig', $params);
     }
@@ -192,16 +193,17 @@ class DefaultController extends Controller
     /**
      * @Route("/vote/term/{slug}", name="voteTerm")
      */
-    public function voteTermAction($slug){
+    public function voteTermAction($slug)
+    {
         $termRepo = $this->getDoctrine()->getRepository('AppBundle:Term');
         $term = $termRepo->findOneBySlug($slug);
 
         $this->session = $this->get('session');
-        if(!$this->session->get('votes')){
+        if (!$this->session->get('votes')) {
             $this->session->set('votes', []);
         }
         $sessionVotes = $this->session->get('votes');
-        if(!array_key_exists($slug,$sessionVotes)){
+        if (!array_key_exists($slug, $sessionVotes)) {
             $voteValue = intval($term->getNbVotes()) + 1;
             $term->setNbVotes($voteValue);
             $em = $this->getDoctrine()->getManager();
@@ -209,16 +211,27 @@ class DefaultController extends Controller
             $em->flush();
 
             $sessionVotes[$slug] = true;
-            $this->session->set('votes',$sessionVotes);
+            $this->session->set('votes', $sessionVotes);
         }
         return new JsonResponse($term->getNbVotes());
     }
 
 
-    public function setEmailSession($data){
-        if(!$this->session->get('email')){
-            $this->session->set('email',$data);
+    public function setEmailSession($data)
+    {
+        if (!$this->session->get('email')) {
+            $this->session->set('email', $data);
         }
     }
 
+    public function renderSideBarAction()
+    {
+        $termRepo = $this->getDoctrine()->getRepository('AppBundle:Term');
+        $terms = $termRepo->findHomeTerms();
+        $params=[
+            "terms"=>$terms
+        ];
+
+        return $this->render('partials/sidebar.html.twig',$params);
+    }
 }

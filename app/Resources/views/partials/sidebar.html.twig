@@ -1,0 +1,8 @@
+<div class="col-xs-6 col-sm-3 sidebar-offcanvas" id="sidebar">
+    <div class="list-group">
+        {% for term in terms %}
+            <a href="{{ path('showTerm', {'slug': term.slug   } ) }}" class="list-group-item">{{ term.name }}</a>
+        {% endfor %}
+
+    </div>
+</div><!--/.sidebar-offcanvas-->

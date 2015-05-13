@@ -1,51 +1,69 @@
 <!DOCTYPE html>
 <html>
-    <head>
-        <meta charset="UTF-8" />
-        <title>{% block title %}{% endblock %}</title>
-        {% block stylesheets %}{% endblock %}
-        <link rel="icon" type="image/x-icon" href="{{ asset('favicon.ico') }}" />
-        <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.4/css/bootstrap.min.css">
-        <link rel="stylesheet" href="{{ asset('css/offcanvas.css') }}"/>
-        <script src="//code.jquery.com/jquery-1.11.3.min.js"></script>
-        <script src='https://www.google.com/recaptcha/api.js'></script>
-    </head>
-    <body>
-        <nav class="navbar navbar-fixed-top navbar-inverse">
-            <div class="container">
-                <div class="navbar-header">
-                    <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar" aria-expanded="false" aria-controls="navbar">
-                        <span class="sr-only">Toggle navigation</span>
-                        <span class="icon-bar"></span>
-                        <span class="icon-bar"></span>
-                        <span class="icon-bar"></span>
-                    </button>
-                    <a class="navbar-brand" href="{{ path('homepage') }}">Dikkebeck</a>
-                </div>
-                <div id="navbar" class="collapse navbar-collapse">
-                    <ul class="nav navbar-nav">
-                        <li {% if app.request.get('_route') == 'index' %} class="active"{% endif %}><a href="{{ path('homepage') }}">Home</a></li>
-                        <li {% if app.request.get('_route') == 'index' %} class="active"{% endif %}><a href="{{ path('addTerm') }}">Ajouter un terme</a></li>
-                        <li {% if app.request.get('_route') == 'index' %} class="active"{% endif %}><a href="#contact">Contact on s'en fou</a></li>
-                    </ul>
-                </div><!-- /.nav-collapse -->
-            </div><!-- /.container -->
-        </nav><!-- /.navbar -->
+<head>
+    <meta charset="UTF-8"/>
+    <title>{% block title %}{% endblock %}</title>
+    {% block stylesheets %}{% endblock %}
+    <link rel="icon" type="image/x-icon" href="{{ asset('favicon.ico') }}"/>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.4/css/bootstrap.min.css">
+    <link rel="stylesheet" href="{{ asset('css/offcanvas.css') }}"/>
+    <script src="//code.jquery.com/jquery-1.11.3.min.js"></script>
+    <script src='https://www.google.com/recaptcha/api.js'></script>
+</head>
+<body>
+<nav class="navbar navbar-fixed-top navbar-inverse">
+    <div class="container">
+        <div class="navbar-header">
+            <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar"
+                    aria-expanded="false" aria-controls="navbar">
+                <span class="sr-only">Toggle navigation</span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+            </button>
+            <a class="navbar-brand" href="{{ path('homepage') }}">Dikkebeck</a>
+        </div>
+        <div id="navbar" class="collapse navbar-collapse">
+            <ul class="nav navbar-nav">
+                <li {% if app.request.get('_route') == 'index' %} class="active"{% endif %}><a
+                            href="{{ path('homepage') }}">Home</a></li>
+                <li {% if app.request.get('_route') == 'index' %} class="active"{% endif %}><a
+                            href="{{ path('addTerm') }}">Ajouter un terme</a></li>
+                <li {% if app.request.get('_route') == 'index' %} class="active"{% endif %}><a href="#contact">Contact
+                        on s'en fou</a></li>
+            </ul>
+        </div>
+        <!-- /.nav-collapse -->
+    </div>
+    <!-- /.container -->
+</nav>
+<!-- /.navbar -->
 
-        {% for flashMessage in app.session.flashbag.get('success') %}
-            <div class="alert alert-success">
-                {{ flashMessage }}
-            </div>
-        {% endfor %}
-        {% for flashMessage in app.session.flashbag.get('error') %}
-            <div class="alert alert-danger">
-                {{ flashMessage }}
-            </div>
-        {% endfor %}
+<div class="container">
+    {% for flashMessage in app.session.flashbag.get('success') %}
+        <div class="alert alert-success">
+            {{ flashMessage }}
+        </div>
+    {% endfor %}
+    {% for flashMessage in app.session.flashbag.get('error') %}
+        <div class="alert alert-danger">
+            {{ flashMessage }}
+        </div>
+    {% endfor %}
+    <div class="row row-offcanvas row-offcanvas-right">
+        {% block body %}
 
-        {% block body %}{% endblock %}
-        <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.4/js/bootstrap.min.js"></script>
-        <script src="{{ asset('js/offcanvas.js') }}"></script>
-        {% block javascripts %}{% endblock %}
-    </body>
+        {% endblock %}
+        {{ render( controller('AppBundle:Default:renderSideBar') ) }}
+
+    </div>
+    <hr/>
+
+    <footer>
+        <p>&copy; Company 2014</p>
+    </footer>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.4/js/bootstrap.min.js"></script>
+    <script src="{{ asset('js/offcanvas.js') }}"></script>
+    {% block javascripts %}{% endblock %}
+</body>
 </html>
