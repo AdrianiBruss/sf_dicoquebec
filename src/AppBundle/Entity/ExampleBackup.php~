@@ -10,7 +10,7 @@ use Doctrine\ORM\Mapping as ORM;
  * @ORM\Table()
  * @ORM\Entity(repositoryClass="AppBundle\Entity\ExampleRepository")
  */
-class Example
+class ExampleBackup
 {
     /**
      * @var integer
@@ -20,6 +20,13 @@ class Example
      * @ORM\GeneratedValue(strategy="AUTO")
      */
     private $id;
+
+    /**
+     * @var \DateTime
+     *
+     * @ORM\Column(name="dateModified", type="datetime")
+     */
+    private $dateModified;
 
     /**
      * @var string
@@ -37,9 +44,9 @@ class Example
 
     /**
      *
-     * @ORM\ManyToOne(targetEntity="AppBundle\Entity\Term", inversedBy="examples", cascade={"persist"})
+     * @ORM\ManyToOne(targetEntity="AppBundle\Entity\TermBackup", inversedBy="examples", cascade={"persist"})
      */
-    private $term;
+    private $termBackup;
 
 
     /**

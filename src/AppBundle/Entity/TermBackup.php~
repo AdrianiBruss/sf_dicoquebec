@@ -86,10 +86,21 @@ class TermBackup
 
     /**
      *
-     * @ORM\ManyToOne(targetEntity="AppBundle\Entity\Term", inversedBy="termBackups")
+     * @ORM\ManyToOne(targetEntity="AppBundle\Entity\Term", inversedBy="termBackups", cascade={"persist"})
      */
     private $term;
-    
+
+    /**
+     *
+     * @ORM\OneToMany(targetEntity="AppBundle\Entity\DefinitionBackup", mappedBy="termBackup")
+     */
+    private $definitions;
+
+    /**
+     *
+     * @ORM\OneToMany(targetEntity="AppBundle\Entity\ExampleBackup", mappedBy="termBackup")
+     */
+    private $examples;
 
 
     /**

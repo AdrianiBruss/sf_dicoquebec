@@ -86,10 +86,21 @@ class TermBackup
 
     /**
      *
-     * @ORM\ManyToOne(targetEntity="AppBundle\Entity\Term", inversedBy="termBackups")
+     * @ORM\ManyToOne(targetEntity="AppBundle\Entity\Term", inversedBy="termBackups", cascade={"persist"})
      */
     private $term;
-    
+
+    /**
+     *
+     * @ORM\OneToMany(targetEntity="AppBundle\Entity\DefinitionBackup", mappedBy="termBackup")
+     */
+    private $definitions;
+
+    /**
+     *
+     * @ORM\OneToMany(targetEntity="AppBundle\Entity\ExampleBackup", mappedBy="termBackup")
+     */
+    private $examples;
 
 
     /**
@@ -330,5 +341,82 @@ class TermBackup
     public function getTerm()
     {
         return $this->term;
+    }
+    /**
+     * Constructor
+     */
+    public function __construct()
+    {
+        $this->definitions = new \Doctrine\Common\Collections\ArrayCollection();
+        $this->examples = new \Doctrine\Common\Collections\ArrayCollection();
+    }
+
+    /**
+     * Add definitions
+     *
+     * @param \AppBundle\Entity\DefinitionBackup $definitions
+     * @return TermBackup
+     */
+    public function addDefinition(\AppBundle\Entity\DefinitionBackup $definitions)
+    {
+        $this->definitions[] = $definitions;
+        $definitions->setTermBackup($this);
+
+        return $this;
+    }
+
+    /**
+     * Remove definitions
+     *
+     * @param \AppBundle\Entity\DefinitionBackup $definitions
+     */
+    public function removeDefinition(\AppBundle\Entity\DefinitionBackup $definitions)
+    {
+        $this->definitions->removeElement($definitions);
+    }
+
+    /**
+     * Get definitions
+     *
+     * @return \Doctrine\Common\Collections\Collection 
+     */
+    public function getDefinitions()
+    {
+        return $this->definitions;
+    }
+
+    /**
+     * Add examples
+     *
+     * @param \AppBundle\Entity\ExampleBackup $examples
+     * @return TermBackup
+     */
+    public function addExample(\AppBundle\Entity\ExampleBackup $examples)
+    {
+        $this->examples[] = $examples;
+        $examples->setTermBackup($this);
+
+
+        return $this;
+    }
+
+    /**
+     * Remove examples
+     *
+     * @param \AppBundle\Entity\ExampleBackup $examples
+     */
+    public function removeExample(\AppBundle\Entity\ExampleBackup $examples)
+    {
+        $this->examples->removeElement($examples);
+    }
+
+    /**
+     * Get examples
+     *
+     * @return \Doctrine\Common\Collections\Collection 
+     */
+    public function getExamples()
+    {
+        return $this->examples;
     }
 }

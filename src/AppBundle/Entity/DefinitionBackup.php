@@ -5,12 +5,12 @@ namespace AppBundle\Entity;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
- * Definition
+ * DefinitionBackup
  *
  * @ORM\Table()
  * @ORM\Entity(repositoryClass="AppBundle\Entity\DefinitionRepository")
  */
-class Definition
+class DefinitionBackup
 {
     /**
      * @var integer
@@ -22,6 +22,13 @@ class Definition
     private $id;
 
     /**
+     * @var \DateTime
+     *
+     * @ORM\Column(name="dateModified", type="datetime")
+     */
+    private $dateModified;
+
+    /**
      * @var string
      *
      * @ORM\Column(name="description", type="text")
@@ -30,9 +37,9 @@ class Definition
 
     /**
      *
-     * @ORM\ManyToOne(targetEntity="AppBundle\Entity\Term", inversedBy="definitions", cascade={"persist"})
+     * @ORM\ManyToOne(targetEntity="AppBundle\Entity\TermBackup", inversedBy="definitions", cascade={"persist"})
      */
-    private $term;
+    private $termBackup;
 
 
     /**
@@ -89,5 +96,51 @@ class Definition
     public function getTerm()
     {
         return $this->term;
+    }
+
+    /**
+     * Set dateModified
+     *
+     * @param \DateTime $dateModified
+     * @return DefinitionBackup
+     */
+    public function setDateModified($dateModified)
+    {
+        $this->dateModified = $dateModified;
+
+        return $this;
+    }
+
+    /**
+     * Get dateModified
+     *
+     * @return \DateTime 
+     */
+    public function getDateModified()
+    {
+        return $this->dateModified;
+    }
+
+    /**
+     * Set termBackup
+     *
+     * @param \AppBundle\Entity\TermBackup $termBackup
+     * @return DefinitionBackup
+     */
+    public function setTermBackup(\AppBundle\Entity\TermBackup $termBackup = null)
+    {
+        $this->termBackup = $termBackup;
+
+        return $this;
+    }
+
+    /**
+     * Get termBackup
+     *
+     * @return \AppBundle\Entity\TermBackup 
+     */
+    public function getTermBackup()
+    {
+        return $this->termBackup;
     }
 }
