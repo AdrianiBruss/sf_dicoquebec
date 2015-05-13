@@ -2,7 +2,5 @@
 
 {% block content %}
     <h1>{{ email }} a ajouté un nouveau mot au dikkebektionnaire</h1>
-    <a href="{{ url("resetPassword", {"email": user.email, "token": user.token}) }}">reset de mot passe</a>
-    <p>{{ user.email }}</p>
-    <p>{{ user.token }}</p>
+    <p> Il a ajouté le mot <a href="{{ url('showTerm', {'slug': term.slug   } ) }}" class="list-group-item">{{ term.name }}</a></p>
 {% endblock %}

@@ -12,7 +12,7 @@ services:
       arguments: ["@doctrine"]
   mail_service:
       class: AppBundle\Service\MailService
-      arguments: ["@mailer"]
+      arguments: ["@mailer","@templating"]
   twig_app_extension:
       class: AppBundle\Twig\AppExtension
       tags:
