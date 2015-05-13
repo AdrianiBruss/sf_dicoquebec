@@ -24,7 +24,14 @@ class TermUpdateType extends AbstractType
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
         $builder
-            ->add('category')
+            ->add('category', 'choice', array(
+                'choices'   => array(
+                    'v'   => 'vocabulaire',
+                    's'     => 'sacre',
+                    'd'   => 'déformation',
+                    'e'             =>'expression'
+                )
+            ))
             ->add('variation')
             ->add('pronunciation')
             ->add('nature')
