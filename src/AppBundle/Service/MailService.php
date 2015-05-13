@@ -10,7 +10,6 @@ class MailService {
 
     private $mailer;
     private $templating;
-    private $admin_mail = "abrussolo@gmail.com";
     public function __construct($mailer,$templating){
         $this->mailer=$mailer;
         $this->templating=$templating;
@@ -20,7 +19,6 @@ class MailService {
         $message = $this->mailer->createMessage()
             ->setSubject('Dikkebek : terme supprimé')
             ->setFrom($email)
-            ->setTo($this->admin_mail)
             ->setBody(
                 $this->templating->render(
                     'mail/term_removed.html.twig',
@@ -38,7 +36,6 @@ class MailService {
         $message = $this->mailer->createMessage()
             ->setSubject('Dikkebek : terme ajouté')
             ->setFrom($email)
-            ->setTo($this->admin_mail)
             ->setBody(
                 $this->templating->render(
                     'mail/term_added.html.twig',
@@ -56,7 +53,6 @@ class MailService {
         $message = $this->mailer->createMessage()
             ->setSubject('Dikkebek : terme modifié')
             ->setFrom($email)
-            ->setTo($this->admin_mail)
             ->setBody(
                 $this->templating->render(
                     'mail/term_updated.html.twig',
