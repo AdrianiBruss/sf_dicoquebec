@@ -2,6 +2,8 @@
 
 namespace AppBundle\Controller;
 
+use AppBundle\Entity\Definition;
+use AppBundle\Entity\Example;
 use AppBundle\Entity\Term;
 use AppBundle\Entity\TermBackup;
 use AppBundle\Form\TermType;
@@ -40,12 +42,19 @@ class DefaultController extends Controller
 
         $newTerm = new Term();
 
+        $def = new Definition();
+        $newTerm->getDefinitions()->add($def);
+
+        $example = new Example();
+        $newTerm->getExamples()->add($example);
+
         $this->session = $this->get('session');
         $termForm = $this->createForm(new TermType($this->session), $newTerm);
+
         $termForm->handleRequest($request);
         if ($termForm->isValid()) {
-            $slugify = new Slugify();
 
+            $slugify = new Slugify();
             $slugified_name = $slugify->slugify($newTerm->getName());
 
 //            check if term already exists
@@ -59,10 +68,14 @@ class DefaultController extends Controller
                 $newTerm->setDateCreated(new \DateTime());
                 $newTerm->setSlug($slugified_name);
 
+
+
                 $em = $this->getDoctrine()->getManager();
                 $em->persist($newTerm);
-                $em->flush();
 
+                $em->flush();
+                dump($newTerm);
+                die();
                 $this->addFlash('success', 'Terme Ajouté ! ');
                 return $this->redirectToRoute('homepage');
 

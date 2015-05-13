@@ -30,7 +30,7 @@ class Definition
 
     /**
      *
-     * @ORM\ManyToOne(targetEntity="AppBundle\Entity\Term", inversedBy="definitions")
+     * @ORM\ManyToOne(targetEntity="AppBundle\Entity\Term", inversedBy="definitions", cascade={"persist"})
      */
     private $term;
 

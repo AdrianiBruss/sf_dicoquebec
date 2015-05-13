@@ -37,7 +37,7 @@ class Example
 
     /**
      *
-     * @ORM\ManyToOne(targetEntity="AppBundle\Entity\Term", inversedBy="examples")
+     * @ORM\ManyToOne(targetEntity="AppBundle\Entity\Term", inversedBy="examples", cascade={"persist"})
      */
     private $term;
 

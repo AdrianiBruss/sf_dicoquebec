@@ -95,13 +95,13 @@ class Term
 
     /**
      *
-     * @ORM\OneToMany(targetEntity="AppBundle\Entity\Definition", mappedBy="term")
+     * @ORM\OneToMany(targetEntity="AppBundle\Entity\Definition", mappedBy="term", cascade={"persist"})
      */
     private $definitions;
 
     /**
      *
-     * @ORM\OneToMany(targetEntity="AppBundle\Entity\Example", mappedBy="term")
+     * @ORM\OneToMany(targetEntity="AppBundle\Entity\Example", mappedBy="term", cascade={"persist"})
      */
     private $examples;
 
@@ -377,7 +377,9 @@ class Term
      */
     public function addDefinition(\AppBundle\Entity\Definition $definitions)
     {
+        die('caca');
         $this->definitions[] = $definitions;
+        $definitions->setTerm($this);
 
         return $this;
     }
@@ -410,7 +412,9 @@ class Term
      */
     public function addExample(\AppBundle\Entity\Example $examples)
     {
+        die('caca');
         $this->examples[] = $examples;
+        $examples->setTerm($this);
 
         return $this;
     }
