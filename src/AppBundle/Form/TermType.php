@@ -32,6 +32,17 @@ class TermType extends AbstractType
             ->add('genre')
             ->add('number')
             ->add('origin')
+            ->add('definitions', 'collection', array(
+                'type' => new TermDefinitionType(),
+                'allow_add' => true,
+                'by_reference' => false,
+            ))
+            ->add('examples', 'collection', array(
+                'type' => new TermExampleType(),
+                'allow_add' => true,
+                'by_reference' => false,
+
+            ))
             ->add('Add New', 'submit', array('label' => 'Ajouter'));
 
         $builder->addEventListener(FormEvents::PRE_SET_DATA, function(FormEvent $event){
