@@ -12,19 +12,19 @@
     <input type="text" class="form-control" id="filter-input" placeholder="Entrez un tarm">
     <div class="checkbox">
         <label>
-            <input type="checkbox" id="voc-input" value="v" checked>
+            <input type="checkbox" class="inputs-cat" id="voc-input" value="v" checked>
             Vocabulaire
         </label>
     </div>
     <div class="checkbox">
         <label>
-            <input type="checkbox" id="sac-input" value="s" checked>
+            <input type="checkbox" class="inputs-cat" id="sac-input" value="s" checked>
             Sacres
         </label>
     </div>
     <div class="checkbox">
         <label>
-            <input type="checkbox" id="def-input" value="d" checked>
+            <input type="checkbox" class="inputs-cat" id="def-input" value="d" checked>
             Déformations
         </label>
     </div>
@@ -37,15 +37,42 @@
         var $voc = $('#voc-input');
         var $sac = $('#sac-input');
         var $def = $('#def-input');
+        var self;
+        var categories = ['v', 'e', 'd'];
+
+
+        $('.inputs-cat').on('change', function(){
+            if($(this).is(':checked')){
+                categories.push($(this).val());
+                filterElements($('#filter-input'));
+            }else{
+                categories.splice(categories.indexOf($(this).val()), 1);
+                filterElements($('#filter-input'));
+            }
+        });
 
         // filtre tarms
         $('#filter-input').on('input', function(){
 
-            $tarms.filter(function(index){
-                return getWords(index, convertToSlug($(this).val().toLowerCase()));
-            }).css('display', 'none');
+            self = $(this);
+
+            filterElements(self);
+
+            if ($(this).val() == ''){
+                $tarms.css('display', 'block');
+            }
 
         });
+
+        function filterElements(el){
+
+            $tarms.css('display', 'none');
+
+            $tarms.filter(function(index){
+                return getWords(index, convertToSlug(el.val().toLowerCase())) && getCat(index);
+            }).css('display', 'block');
+
+        }
 
 
         function getWords(index, tarm){
@@ -53,7 +80,7 @@
         }
 
         function getCat(index){
-            if($tarms.eq(index).attr('data-cat') != 'v'){
+            if(categories.indexOf($tarms.eq(index).attr('data-cat')) != -1){
                 return true;
             }
         }
