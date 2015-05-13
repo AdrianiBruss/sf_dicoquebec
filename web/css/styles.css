@@ -1,0 +1,6 @@
+.list-group{
+    height: 349px;
+    overflow: scroll;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+}
