@@ -38,16 +38,18 @@
         var $sac = $('#sac-input');
         var $def = $('#def-input');
         var self;
-        var categories = ['v', 'e', 'd'];
+        var categories = ['v', 's', 'd'];
 
 
         $('.inputs-cat').on('change', function(){
             if($(this).is(':checked')){
                 categories.push($(this).val());
                 filterElements($('#filter-input'));
+
             }else{
                 categories.splice(categories.indexOf($(this).val()), 1);
                 filterElements($('#filter-input'));
+                
             }
         });
 
