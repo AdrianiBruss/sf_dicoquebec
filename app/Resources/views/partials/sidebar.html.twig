@@ -1,8 +1,76 @@
 <div class="col-xs-6 col-sm-3 sidebar-offcanvas" id="sidebar">
     <div class="list-group">
         {% for term in terms %}
-            <a href="{{ path('showTerm', {'slug': term.slug   } ) }}" class="list-group-item">{{ term.name }}</a>
+            <a
+                href="{{ path('showTerm', {'slug': term.slug   } ) }}"
+                data-slug="{{ term.slug }}" data-cat="{{ term.category }}"
+                class="list-group-item tarm-item">
+            {{ term.name }}</a>
         {% endfor %}
-
+    </div>
+    <p>Filtrer : </p>
+    <input type="text" class="form-control" id="filter-input" placeholder="Entrez un tarm">
+    <div class="checkbox">
+        <label>
+            <input type="checkbox" id="voc-input" value="v" checked>
+            Vocabulaire
+        </label>
+    </div>
+    <div class="checkbox">
+        <label>
+            <input type="checkbox" id="sac-input" value="s" checked>
+            Sacres
+        </label>
+    </div>
+    <div class="checkbox">
+        <label>
+            <input type="checkbox" id="def-input" value="d" checked>
+            Déformations
+        </label>
     </div>
 </div><!--/.sidebar-offcanvas-->
+<script>
+
+    $(function(){
+
+        var $tarms = $('.tarm-item');
+        var $voc = $('#voc-input');
+        var $sac = $('#sac-input');
+        var $def = $('#def-input');
+
+        // filtre tarms
+        $('#filter-input').on('input', function(){
+
+            $tarms.filter(function(index){
+                return getWords(index, convertToSlug($(this).val().toLowerCase()));
+            }).css('display', 'none');
+
+        });
+
+
+        function getWords(index, tarm){
+            return findLetter($tarms.eq(index).attr('data-slug'),tarm);
+        }
+
+        function getCat(index){
+            if($tarms.eq(index).attr('data-cat') != 'v'){
+                return true;
+            }
+        }
+
+        function findLetter(string, letter){
+            return (string.indexOf(letter) != -1);
+
+        }
+
+        function convertToSlug(Text)
+        {
+            return Text
+                    .toLowerCase()
+                    .replace(/ /g,'-')
+                    .replace(/[^\w-]+/g,'');
+        }
+
+    })
+
+</script>
