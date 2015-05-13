@@ -28,6 +28,12 @@
             Déformations
         </label>
     </div>
+    <div class="checkbox">
+        <label>
+            <input type="checkbox" class="inputs-cat" id="exp-input" value="e" checked>
+            Expressions
+        </label>
+    </div>
 </div><!--/.sidebar-offcanvas-->
 <script>
 
@@ -38,7 +44,7 @@
         var $sac = $('#sac-input');
         var $def = $('#def-input');
         var self;
-        var categories = ['v', 's', 'd'];
+        var categories = ['v', 's', 'd', 'e'];
 
 
         $('.inputs-cat').on('change', function(){
