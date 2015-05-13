@@ -55,8 +55,9 @@ class DefaultController extends Controller
 
         $termForm->handleRequest($request);
         if ($termForm->isValid()) {
-
-            $this->setEmailSession($termForm->get('email')->getData());
+            if($termForm->has('email')){
+                $this->setEmailSession($termForm->get('email')->getData());
+            }
 
             $slugify = new Slugify();
             $slugified_name = $slugify->slugify($newTerm->getName());
@@ -89,7 +90,10 @@ class DefaultController extends Controller
                 $em->persist($newTerm);
 
                 $em->flush();
+
                 $this->addFlash('success', 'Terme Ajouté ! ');
+
+                $this->get('mail_service')->sendMailOnAdd($this->getEmailSession(),$newTerm);
                 return $this->redirectToRoute('homepage');
 
             } else {
@@ -122,14 +126,16 @@ class DefaultController extends Controller
         $termForm = $this->createForm(new TermUpdateType($this->session), $term);
         $termForm->handleRequest($request);
         if ($termForm->isValid()) {
-
-            $this->setEmailSession($termForm->get('email')->getData());
-
+            if($termForm->has('email')) {
+                $this->setEmailSession($termForm->get('email')->getData());
+            }
             if ($termForm->get('Delete')->isClicked()) {
                 $em = $this->getDoctrine()->getManager();
                 $em->remove($term);
                 $em->flush();
                 $this->addFlash('success', 'Terme ' . $term->getName() . ' Supprimé ! ');
+
+                $this->get('mail_service')->sendMailOnRemoval($this->getEmailSession(),$term);
                 return $this->redirectToRoute('homepage');
             }
 
@@ -152,6 +158,8 @@ class DefaultController extends Controller
             $em->flush();
 
             $this->addFlash('success', 'Terme Modifié ! ');
+
+            $this->get('mail_service')->sendMailOnUpdate($this->getEmailSession(),$term);
             return $this->redirectToRoute('homepage');
 
         }
@@ -222,6 +230,10 @@ class DefaultController extends Controller
         if (!$this->session->get('email')) {
             $this->session->set('email', $data);
         }
+    }
+
+    public function getEmailSession(){
+        return $this->session->get('email');
     }
 
     public function renderSideBarAction()
