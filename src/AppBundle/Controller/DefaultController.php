@@ -43,13 +43,14 @@ class DefaultController extends Controller
         $newTerm = new Term();
 
         $def = new Definition();
-        $newTerm->getDefinitions()->add($def);
+        $newTerm->addDefinition($def);
 
         $example = new Example();
-        $newTerm->getExamples()->add($example);
+        $newTerm->addExample($example);
 
         $this->session = $this->get('session');
         $termForm = $this->createForm(new TermType($this->session), $newTerm);
+
 
         $termForm->handleRequest($request);
         if ($termForm->isValid()) {
@@ -69,13 +70,22 @@ class DefaultController extends Controller
                 $newTerm->setSlug($slugified_name);
 
 
+                foreach($newTerm->getDefinitions() as $desc){
+                    if(!($desc->getDescription())){
+                        $newTerm->removeDefinition($desc);
+                    }
+                }
+
+                foreach($newTerm->getExamples() as $ex){
+                    if(!($ex->getExample()) || !($ex->getTranslation()) ){
+                        $newTerm->removeExample($ex);
+                    }
+                }
 
                 $em = $this->getDoctrine()->getManager();
                 $em->persist($newTerm);
 
                 $em->flush();
-                dump($newTerm);
-                die();
                 $this->addFlash('success', 'Terme Ajouté ! ');
                 return $this->redirectToRoute('homepage');
 

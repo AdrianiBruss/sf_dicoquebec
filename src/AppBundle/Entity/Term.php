@@ -377,7 +377,7 @@ class Term
      */
     public function addDefinition(\AppBundle\Entity\Definition $definitions)
     {
-        die('caca');
+
         $this->definitions[] = $definitions;
         $definitions->setTerm($this);
 
@@ -412,7 +412,6 @@ class Term
      */
     public function addExample(\AppBundle\Entity\Example $examples)
     {
-        die('caca');
         $this->examples[] = $examples;
         $examples->setTerm($this);
 
