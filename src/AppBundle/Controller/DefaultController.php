@@ -32,7 +32,6 @@ class DefaultController extends Controller
             'terms'=>$terms,
             'wotd'=>$wotd
         ];
-        dump($params);
         return $this->render('default/index.html.twig',$params);
     }
 
@@ -56,6 +55,8 @@ class DefaultController extends Controller
 
         $termForm->handleRequest($request);
         if ($termForm->isValid()) {
+
+            $this->setEmailSession($termForm->get('email')->getData());
 
             $slugify = new Slugify();
             $slugified_name = $slugify->slugify($newTerm->getName());
@@ -110,17 +111,20 @@ class DefaultController extends Controller
      */
     public function updateTermAction($slug, Request $request)
     {
+
+
         $termRepo = $this->getDoctrine()->getRepository('AppBundle:Term');
 
         $term = $termRepo->findOneBySlug($slug);
 
         $this->session = $this->get('session');
+
         $termForm = $this->createForm(new TermUpdateType($this->session), $term);
         $termForm->handleRequest($request);
         if ($termForm->isValid()) {
-            if(!$this->session->get('email')){
-                $this->session->set('email',$termForm->get('email')->getData());
-            }
+
+            $this->setEmailSession($termForm->get('email')->getData());
+
             if ($termForm->get('Delete')->isClicked()) {
                 $em = $this->getDoctrine()->getManager();
                 $em->remove($term);
@@ -166,15 +170,17 @@ class DefaultController extends Controller
     public function showTermAction($slug){
         $voted=false;
         $this->session = $this->get('session');
-        dump($this->session->get('votes'));
 
         $termRepo = $this->getDoctrine()->getRepository('AppBundle:Term');
         $term = $termRepo->findOneBySlug($slug);
 
         $this->session=$this->get('session');
-        if(array_key_exists($slug,$this->get('session')->get('votes'))){
-            $voted=true;
+        if($this->get('session')->get('votes')){
+            if(array_key_exists($slug,$this->get('session')->get('votes'))){
+                $voted=true;
+            }
         }
+
 
         $params = [
             'term'=>$term,
@@ -191,6 +197,9 @@ class DefaultController extends Controller
         $term = $termRepo->findOneBySlug($slug);
 
         $this->session = $this->get('session');
+        if(!$this->session->get('votes')){
+            $this->session->set('votes', []);
+        }
         $sessionVotes = $this->session->get('votes');
         if(!array_key_exists($slug,$sessionVotes)){
             $voteValue = intval($term->getNbVotes()) + 1;
@@ -203,6 +212,13 @@ class DefaultController extends Controller
             $this->session->set('votes',$sessionVotes);
         }
         return new JsonResponse($term->getNbVotes());
+    }
+
+
+    public function setEmailSession($data){
+        if(!$this->session->get('email')){
+            $this->session->set('email',$data);
+        }
     }
 
 }
