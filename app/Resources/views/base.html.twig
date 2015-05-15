@@ -26,12 +26,10 @@
         </div>
         <div id="navbar" class="collapse navbar-collapse">
             <ul class="nav navbar-nav">
-                <li {% if app.request.get('_route') == 'index' %} class="active"{% endif %}><a
+                <li {% if app.request.get('_route') == 'homepage' %} class="active"{% endif %}><a
                             href="{{ path('homepage') }}">Home</a></li>
-                <li {% if app.request.get('_route') == 'index' %} class="active"{% endif %}><a
+                <li {% if app.request.get('_route') == 'addTerm' %} class="active"{% endif %}><a
                             href="{{ path('addTerm') }}">Ajouter un terme</a></li>
-                <li {% if app.request.get('_route') == 'index' %} class="active"{% endif %}><a href="#contact">Contact
-                        on s'en fou</a></li>
 
             </ul>
         </div>
@@ -64,11 +62,14 @@
     <footer>
         <p>&copy; MacDad & Bricolo 2015</p>
     </footer>
+    <div id="caca" style="display:none">{{ app.request.get('_route') }}</div>
 </div>
 <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.4/js/bootstrap.min.js"></script>
 <script src="{{ asset('js/offcanvas.js') }}"></script>
-{% block javascripts %}{% endblock %}
 <script>
+
+    var route  = document.getElementById("caca").innerHTML;
+
     (function (i, s, o, g, r, a, m) {
         i['GoogleAnalyticsObject'] = r;
         i[r] = i[r] || function () {
@@ -82,7 +83,9 @@
     })(window, document, 'script', '//www.google-analytics.com/analytics.js', 'ga');
 
     ga('create', 'UA-58433575-2', 'auto');
-    ga('send', 'pageview');
+    ga('send', route);
 </script>
+{% block javascripts %}
+{% endblock %}
 </body>
 </html>
