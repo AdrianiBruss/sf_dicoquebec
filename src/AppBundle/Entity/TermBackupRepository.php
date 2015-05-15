@@ -12,4 +12,29 @@ use Doctrine\ORM\EntityRepository;
  */
 class TermBackupRepository extends EntityRepository
 {
+
+    public function getExAndDefBackups($id){
+
+        $qb = $this->createQueryBuilder("a");
+
+        $query = $qb
+            ->orderBy("a.id", 'DESC')
+            ->where("term_id = :id")
+            ->setParameter('id', $id)
+            ->and()
+            ->getRepository('AppBundle:ExampleBackup')
+            ->createQueryBuilder('e')
+            ->join('e.termBackup', 'a')
+            ->where("e.termBackup = :idB")
+            ->setParameter('idB', $id)
+            ->and()
+            ->getRepository('AppBundle:DefinitionBackup')
+            ->createQueryBuilder('e')
+            ->join('e.termBackup', 'a');
+
+
+        return $query->getOneOrNullResult();
+
+    }
+
 }

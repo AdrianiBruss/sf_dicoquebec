@@ -119,6 +119,7 @@ class DefaultController extends Controller
     public function updateTermAction($slug, Request $request)
     {
 
+
         $termRepo = $this->getDoctrine()->getRepository('AppBundle:Term');
 
         $term = $termRepo->findOneBySlug($slug);
@@ -213,8 +214,8 @@ class DefaultController extends Controller
     }
 
     /**
-     * @Route("/term/{slug}", name="showTerm")
-     */
+ * @Route("/term/{slug}", name="showTerm")
+ */
     public function showTermAction($slug)
     {
         $voted = false;
@@ -236,6 +237,25 @@ class DefaultController extends Controller
             'voted' => $voted
         ];
         return $this->render('term/single.html.twig', $params);
+    }
+
+    /**
+     * @Route("/term/backup/{id}", name="showTermBackup")
+     */
+    public function showTermBackupAction($id)
+    {
+
+        $termRepo = $this->getDoctrine()->getRepository('AppBundle:Term');
+        $backup = $termRepo->findOneById($id);
+        $termBackupRepo = $this->getDoctrine()->getRepository('AppBundle:TermBackup');
+        $backups = $termBackupRepo->getExAndDefBackups($backup->getId());
+
+
+        $params = [
+            'backups' => $backups,
+        ];
+
+        return $this->render('term/backup.html.twig', $params);
     }
 
     /**

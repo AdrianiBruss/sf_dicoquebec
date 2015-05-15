@@ -19,6 +19,7 @@
                         Up!</a></p>
             {% endif %}
                 <p><a class=" btn btn-lg btn-warning" href="{{ path('updateTerm', {'slug': term.slug}) }}" role="button">Modifier</a></p>
+                <p><a class=" btn btn-lg btn-danger" href="{{ path('showTermBackup', {'id': term.id}) }}" role="button">Backups</a></p>
         </div>
         <div class="row marketing">
             <div class="col-lg-6">
