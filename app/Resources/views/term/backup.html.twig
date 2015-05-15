@@ -1,20 +1,60 @@
 {% extends 'base.html.twig' %}
 {% block body %}
     <div class="col-xs-12 col-sm-9">
-        {{ dump(backups) }}
-        {% for backup in backups %}
-            <tr>
-                <td>{{ backup.name }}</td>
-                <td>{{ backup.dateModified | date }}</td>
-            </tr>
-            {% for def in backup.definitions %}
-                <td>{{ def.description }}</td>
-            {% endfor %}
-            {% for def in backup.examples %}
-                <td>{{ def.example }}</td>
-                <td>{{ def.translation }}</td>
-            {% endfor %}
-        {% endfor %}
+
+        {% if(backups | length < 1) %}
+            <h2>Pas de backups par ici</h2>
+        {% else %}
+        <table class="table">
+
+            <thead>
+                <tr>
+                    <th>Modif</th>
+                    <th>Cat</th>
+                    <th>Var</th>
+                    <th>Pro</th>
+                    <th>Nature</th>
+                    <th>Genre</th>
+                    <th>Nombre</th>
+                    <th>Origin</th>
+                    <th>Def</th>
+                    <th>Ex</th>
+                </tr>
+            </thead>
+
+            <tbody>
+
+
+                    {% for backup in backups %}
+                    <tr>
+                        <td>{{ backup.dateModified | date }}</td>
+                        <td>{{ backup.category }}</td>
+                        <td>{{ backup.variation }}</td>
+                        <td>{{ backup.pronunciation }}</td>
+                        <td>{{ backup.nature }}</td>
+                        <td>{{ backup.genre }}</td>
+                        <td>{{ backup.number }}</td>
+                        <td>{{ backup.origin }}</td>
+                        <td>
+                            {% for def in backup.definitions %}
+                                {{ def.description }}
+                            {% endfor %}
+                        </td>
+                        <td>
+                            {% for def in backup.examples %}
+                                {{ def.example }}
+                                {{ def.translation }}
+                            {% endfor %}
+                        </td>
+                    </tr>
+                {% endfor %}
+
+
+            </tbody>
+        </table>
+
+        {% endif %}
+
     </div>
 
 

@@ -250,6 +250,7 @@ class DefaultController extends Controller
 
         $params = [
             'backups' => $backups,
+
         ];
 
         return $this->render('term/backup.html.twig', $params);
