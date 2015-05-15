@@ -245,11 +245,8 @@ class DefaultController extends Controller
     public function showTermBackupAction($id)
     {
 
-        $termRepo = $this->getDoctrine()->getRepository('AppBundle:Term');
-        $backup = $termRepo->findOneById($id);
-        $termBackupRepo = $this->getDoctrine()->getRepository('AppBundle:TermBackup');
-        $backups = $termBackupRepo->getExAndDefBackups($backup->getId());
-
+        $termRepo = $this->getDoctrine()->getRepository('AppBundle:TermBackup');
+        $backups = $termRepo->findByTerm($id);
 
         $params = [
             'backups' => $backups,

@@ -1,8 +1,21 @@
 {% extends 'base.html.twig' %}
 {% block body %}
-<div class="col-xs-12 col-sm-9">
-    {{ dump(term)}}
-</div>
+    <div class="col-xs-12 col-sm-9">
+        {{ dump(backups) }}
+        {% for backup in backups %}
+            <tr>
+                <td>{{ backup.name }}</td>
+                <td>{{ backup.dateModified | date }}</td>
+            </tr>
+            {% for def in backup.definitions %}
+                <td>{{ def.description }}</td>
+            {% endfor %}
+            {% for def in backup.examples %}
+                <td>{{ def.example }}</td>
+                <td>{{ def.translation }}</td>
+            {% endfor %}
+        {% endfor %}
+    </div>
 
 
 {% endblock %}
