@@ -39,7 +39,17 @@ class TermUpdateType extends AbstractType
             ->add('number')
 
             ->add('origin')
+            ->add('definitions', 'collection', array(
+                'type' => new TermDefinitionType(),
+                'allow_add' => true,
+                'by_reference' => false,
+            ))
+            ->add('examples', 'collection', array(
+                'type' => new TermExampleType(),
+                'allow_add' => true,
+                'by_reference' => false,
 
+            ))
             ->add('Update', 'submit', array('label'=>'Modifier'))
             ->add('Delete', 'submit', array('label'=>'supprimer'));
 

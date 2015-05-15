@@ -3,7 +3,9 @@
 namespace AppBundle\Controller;
 
 use AppBundle\Entity\Definition;
+use AppBundle\Entity\DefinitionBackup;
 use AppBundle\Entity\Example;
+use AppBundle\Entity\ExampleBackup;
 use AppBundle\Entity\Term;
 use AppBundle\Entity\TermBackup;
 use AppBundle\Form\TermType;
@@ -43,11 +45,6 @@ class DefaultController extends Controller
 
         $newTerm = new Term();
 
-        $def = new Definition();
-        $newTerm->addDefinition($def);
-
-        $example = new Example();
-        $newTerm->addExample($example);
 
         $this->session = $this->get('session');
         $termForm = $this->createForm(new TermType($this->session), $newTerm);
@@ -55,7 +52,13 @@ class DefaultController extends Controller
 
         $termForm->handleRequest($request);
         if ($termForm->isValid()) {
-            if($termForm->has('email')){
+            $def = new Definition();
+            $newTerm->addDefinition($def);
+
+            $example = new Example();
+            $newTerm->addExample($example);
+
+            if ($termForm->has('email')) {
                 $this->setEmailSession($termForm->get('email')->getData());
             }
 
@@ -93,7 +96,7 @@ class DefaultController extends Controller
 
                 $this->addFlash('success', 'Terme Ajouté ! ');
 
-                $this->get('mail_service')->sendMailOnAdd($this->getEmailSession(),$newTerm);
+                $this->get('mail_service')->sendMailOnAdd($this->getEmailSession(), $newTerm);
                 return $this->redirectToRoute('homepage');
 
             } else {
@@ -116,17 +119,34 @@ class DefaultController extends Controller
     public function updateTermAction($slug, Request $request)
     {
 
-
         $termRepo = $this->getDoctrine()->getRepository('AppBundle:Term');
 
         $term = $termRepo->findOneBySlug($slug);
+
 
         $this->session = $this->get('session');
 
         $termForm = $this->createForm(new TermUpdateType($this->session), $term);
         $termForm->handleRequest($request);
         if ($termForm->isValid()) {
-            if($termForm->has('email')) {
+
+            $def = new Definition();
+            $term->addDefinition($def);
+            $example = new Example();
+            $term->addExample($example);
+
+            foreach ($term->getDefinitions() as $desc) {
+                if (!($desc->getDescription())) {
+                    $term->removeDefinition($desc);
+                }
+            }
+
+            foreach ($term->getExamples() as $ex) {
+                if (!($ex->getExample()) || !($ex->getTranslation())) {
+                    $term->removeExample($ex);
+                }
+            }
+            if ($termForm->has('email')) {
                 $this->setEmailSession($termForm->get('email')->getData());
             }
             if ($termForm->get('Delete')->isClicked()) {
@@ -135,9 +155,10 @@ class DefaultController extends Controller
                 $em->flush();
                 $this->addFlash('success', 'Terme ' . $term->getName() . ' Supprimé ! ');
 
-                $this->get('mail_service')->sendMailOnRemoval($this->getEmailSession(),$term);
+                $this->get('mail_service')->sendMailOnRemoval($this->getEmailSession(), $term);
                 return $this->redirectToRoute('homepage');
             }
+
 
             $updatedTerm = new TermBackup();
             $updatedTerm->setTerm($term);
@@ -152,14 +173,33 @@ class DefaultController extends Controller
             $updatedTerm->setGenre($term->getGenre());
 
 
+            foreach ($term->getDefinitions() as $def) {
+                $defBackup = new DefinitionBackup();
+                $defBackup->setDateModified(new \DateTime());
+                $defBackup->setDescription($def->getDescription());
+                $updatedTerm->addDefinition($defBackup);
+            }
+
+            foreach ($term->getExamples() as $ex) {
+                $exampleBackup = new ExampleBackup();
+                $exampleBackup->setDateModified(new \DateTime());
+                $exampleBackup->setExample($ex->getExample());
+                $exampleBackup->setTranslation($ex->getTranslation());
+                $updatedTerm->addExample($exampleBackup);
+            }
+//            $updatedTerm->addExample($exampleBackup);
+
+
             $em = $this->getDoctrine()->getManager();
             $em->persist($term);
             $em->persist($updatedTerm);
+//            dump($term);
+//            dump($updatedTerm);die;
             $em->flush();
 
             $this->addFlash('success', 'Terme Modifié ! ');
 
-            $this->get('mail_service')->sendMailOnUpdate($this->getEmailSession(),$term);
+            $this->get('mail_service')->sendMailOnUpdate($this->getEmailSession(), $term);
             return $this->redirectToRoute('homepage');
 
         }
@@ -232,7 +272,8 @@ class DefaultController extends Controller
         }
     }
 
-    public function getEmailSession(){
+    public function getEmailSession()
+    {
         return $this->session->get('email');
     }
 
@@ -240,10 +281,10 @@ class DefaultController extends Controller
     {
         $termRepo = $this->getDoctrine()->getRepository('AppBundle:Term');
         $terms = $termRepo->findHomeTerms();
-        $params=[
-            "terms"=>$terms
+        $params = [
+            "terms" => $terms
         ];
 
-        return $this->render('partials/sidebar.html.twig',$params);
+        return $this->render('partials/sidebar.html.twig', $params);
     }
 }

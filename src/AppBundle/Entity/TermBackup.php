@@ -92,13 +92,13 @@ class TermBackup
 
     /**
      *
-     * @ORM\OneToMany(targetEntity="AppBundle\Entity\DefinitionBackup", mappedBy="termBackup")
+     * @ORM\OneToMany(targetEntity="AppBundle\Entity\DefinitionBackup", mappedBy="termBackup", cascade={"persist"})
      */
     private $definitions;
 
     /**
      *
-     * @ORM\OneToMany(targetEntity="AppBundle\Entity\ExampleBackup", mappedBy="termBackup")
+     * @ORM\OneToMany(targetEntity="AppBundle\Entity\ExampleBackup", mappedBy="termBackup", cascade={"persist"})
      */
     private $examples;
 

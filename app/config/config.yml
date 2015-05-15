@@ -73,8 +73,7 @@ swiftmailer:
     username:  "%mailer_user%"
     password:  "%mailer_password%"
 #    spool:     { type: memory }
-    delivery_address:  abrussolo@gmail.com
-
+    delivery_address: taylorkevin@outlook.com
 
 ewz_recaptcha:
     public_key: 6Lf2CPwSAAAAACksRCt3E7-cWv3THXCOZdcf8Diw

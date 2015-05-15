@@ -10,4 +10,47 @@
 
         {{ form(termForm, {"attr":{"novalidate":"novalidate"}}) }}
     </div>
+
+    <script>
+
+        var collectionHolderDefinitions = $('#appbundle_update_term_definitions');
+        var collectionHolderExamples = $('#appbundle_update_term_examples');
+
+        var $addDefLink = $('<a href="#" class="add_tag_link">Ajouter une définition</a>');
+        var $addExampleLink = $('<a href="#" class="add_tag_link">Ajouter un example</a>');
+        var $newDefLink = $('<div></div>').append($addDefLink);
+        var $newExampleLink = $('<div></div>').append($addExampleLink);
+
+        jQuery(document).ready(function() {
+
+            collectionHolderDefinitions.append($newDefLink);
+            collectionHolderExamples.append($newExampleLink);
+
+            $addDefLink.on('click', function(e) {
+                e.preventDefault();
+                addTagForm(collectionHolderDefinitions, $newDefLink);
+            });
+
+            $addExampleLink.on('click', function(e) {
+                e.preventDefault();
+                addTagForm(collectionHolderExamples, $newExampleLink);
+            });
+        });
+
+        function addTagForm(collectionHolder, $newLinkLi) {
+
+            var prototype = collectionHolder.attr('data-prototype');
+
+            // Remplace '__name__' dans le HTML du prototype par un nombre basé sur
+            // la longueur de la collection courante
+            var newForm = prototype.replace(/__name__/g, collectionHolder.children().length);
+
+
+            // Affiche le formulaire dans la page dans un li, avant le lien "ajouter un tag"
+            var $newFormLi = $('<div></div>').append(newForm);
+            $newLinkLi.before($newFormLi);
+        }
+
+
+    </script>
 {% endblock %}
